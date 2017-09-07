@@ -20,7 +20,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.gojek.parkinglot.Main</mainClass>
+                            <mainClass>com.gojek.main.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
