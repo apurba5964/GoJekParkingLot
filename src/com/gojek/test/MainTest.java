@@ -61,7 +61,7 @@ public class MainTest {
 	@Test
 	public void unKnownCommandTest() {
 		ParkingApp app = new ParkingApp();
-		app.runCommand("sjkdgvkjsd", null);
+		app.runCommand("sjkdgvkjsd", null,app.createMap());
 		assertTrue(outContent.toString().contains("Please try any of these commands: "));
 		outContent.reset();
 	}

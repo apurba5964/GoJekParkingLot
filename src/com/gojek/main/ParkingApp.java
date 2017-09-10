@@ -1,8 +1,17 @@
 package com.gojek.main;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.gojek.actions.Action;
+import com.gojek.actions.CreateParkLot;
+import com.gojek.actions.FindRegNumByVehicleColor;
+import com.gojek.actions.FindSlotsByVehicleColor;
+import com.gojek.actions.FindSlotsByVehicleRegNum;
+import com.gojek.actions.Leave;
+import com.gojek.actions.Park;
+import com.gojek.actions.Status;
 import com.gojek.parkinglot.ParkingLot;
 import com.gojek.parkinglot.Slot;
 import com.gojek.vehicle.Car;
@@ -10,20 +19,49 @@ import com.gojek.vehicle.IVehicle;
 
 public class ParkingApp {
 	
-	private ParkingLot parkingLot;
+	
 	
 	private StringBuilder output;
 	
-	public void runCommand(String command, String[] params) {
-		try{
-			GojekCommands.valueOf(command);
+	public HashMap<String, Action> createMap(){
+		HashMap<String, Action> map=new HashMap<>();
+		
+		map.put(GojekCommands.leave.toString(),new Leave());
+		map.put(GojekCommands.status.toString(),new Status());
+		map.put(GojekCommands.registration_numbers_for_cars_with_colour.toString(),new FindRegNumByVehicleColor());
+		map.put(GojekCommands.slot_numbers_for_cars_with_colour.toString(),new FindSlotsByVehicleColor());
+		map.put(GojekCommands.slot_number_for_registration_number.toString(),new FindSlotsByVehicleRegNum());
+		map.put(GojekCommands.park.toString(), new Park());
+		
+		return map;
+	}
+	
+	public void runCommand(String command, String[] params, HashMap<String, Action> actionMap) {
+		
+		if(actionMap.containsKey(command)){
+		
+			Action action=actionMap.get(command);
+			action.action(params);
+			
+		}else if (GojekCommands.create_parking_lot.toString().equalsIgnoreCase(command)){
+			CreateParkLot.createParkingLot(params);
+			
 		}
-		catch(Exception ex) {
+		else{
 			printOut(command + " is not recognised as a command");
 			printOut("Please try any of these commands: " + GojekCommands.valuesToString());
 			return;
 		}
-		switch(GojekCommands.valueOf(command)) {
+			
+		/*try{
+			GojekCommands.valueOf(command);
+			
+		}
+		catch(Exception ex) {
+			
+		}*/
+	}
+		/*switch(GojekCommands.valueOf(command)) {
 		case create_parking_lot:
 			createParkingLot(params);
 			break;
@@ -48,9 +86,9 @@ public class ParkingApp {
 		default:
 			break;
 		}
-	}
+	}*/
 	
-	public void createParkingLot(String[] params) {
+	/*public void createParkingLot(String[] params) {
 		String param = params[1];
 		int numSlots = Integer.parseInt(param);
 		parkingLot = new ParkingLot(numSlots);
@@ -107,6 +145,7 @@ public class ParkingApp {
 		printOut(String.join(",", parkingLot.findSlotsByVehicleRegNum(regNum)));
 	}
 	
+	*/
 	public String getOutput() {
 		return output.toString();
 	}

@@ -8,16 +8,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+
+import com.gojek.actions.Action;
 
 public class Main {
 	
 	static ParkingApp parkingApp;
+	static HashMap<String, Action> actionMap;
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		parkingApp = new ParkingApp();
+		actionMap =parkingApp.createMap();
 		BufferedReader br1 = null;
 		FileWriter wr = null;
 		if(args.length > 0) { 
@@ -28,7 +33,7 @@ public class Main {
 				while((commandLine = br1.readLine()) != null) {
 					commandSplits = commandLine.split(" ");
 					String command = commandSplits[0];
-					parkingApp.runCommand(command, commandSplits);
+					parkingApp.runCommand(command, commandSplits,actionMap);
 				}
 				wr = new FileWriter(new File(new File("").getAbsolutePath() + "\\" + args[2]));
 				//Writing the output to the specified file
@@ -54,7 +59,7 @@ public class Main {
 				while(!(commandLine = br2.readLine()).equals("exit")) {
 					commandSplits = commandLine.split(" ");
 					String command = commandSplits[0];
-					parkingApp.runCommand(command, commandSplits);
+					parkingApp.runCommand(command, commandSplits,actionMap);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
